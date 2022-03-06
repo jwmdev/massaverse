@@ -1,4 +1,8 @@
 import 'package:massaverse/api/network_service.dart';
+import 'package:massaverse/models/block_response.dart';
+import 'package:massaverse/models/cliques_response.dart';
+import 'package:massaverse/models/operations_response.dart';
+import 'package:massaverse/models/status_response.dart';
 
 class SendResponse {
   bool status;
@@ -28,72 +32,67 @@ class ApiService {
   Future<dynamic> getStatus() async {
     var method = "get_status";
     var response = await _post(pubUri, method, null);
-    //print("response: $response");
-    return response;
+    response = response["result"];
+    var data = Map<String, dynamic>.from(response);
+    return StatusResponse.decode(data);
+  }
+
+  Future<dynamic> getCliques() async {
+    var method = "get_cliques";
+    var response = await _post(pubUri, method, null);
+    response = response["result"];
+    var data = List<dynamic>.from(response);
+    return CliquesResponse.decode(data[0]);
+  }
+
+// getStakers returns a map of addresses with their respective staked rolls
+  Future<Map<dynamic, dynamic>> getStakers() async {
+    var method = "get_stakers";
+    var response = await _post(pubUri, method, null);
+    response = response["result"];
+    var data = Map<dynamic, dynamic>.from(response);
+    return data;
+  }
+
+  Future<dynamic> getOperations(List<String> ops) async {
+    var method = "get_operations";
+    var params = [ops];
+    var response = await _post(pubUri, method, params);
+    response = response["result"];
+    var data = List<dynamic>.from(response);
+    if (data.isNotEmpty) {
+      return OperationsResponse.decode(
+          data[0]); //currently returning a single operation
+    }
+    return [];
+  }
+
+  Future<dynamic> getEndosements(List<String> endosement) async {
+    var method = "get_endorsements";
+    var params = [endosement];
+    var response = await _post(pubUri, method, params);
+    print("endosement: $response");
+    response = response["result"];
+    print("endosement: $response");
+    var data = List<dynamic>.from(response);
+    /*if (data.isNotEmpty) {
+      return OperationsResponse.decode(
+          data[0]); //currently returning a single operation
+    }*/
+    return [];
+  }
+
+  Future<dynamic> getBlock(String blockHash) async {
+    var method = "get_block";
+    var params = [blockHash];
+    var response = await _post(pubUri, method, params);
+    //print("block: $response");
+    response = response["result"];
+    var data = Map<String, dynamic>.from(response);
+    return BlockResponse.decode(data);
   }
 
 /*
-//get address balance
-  Future<Wallet> fetchBalance(String address) async {
-    var method = "fetch-balance";
-    var params = {"address": address};
-    //Uri uri = Uri.http(torUrl, "");
-    var response = await _post(torUri, method, params);
-    //print(response);
-    response = response["result"];
-    var data = Map<String, dynamic>.from(response);
-    return Wallet.fromJson(data);
-  }
-
-  Future<List<Wallet>> fetchBalances(List<String> addresses) async {
-    var method = "fetch-balances";
-    var params = {"addresses": addresses};
-    var response = await _post(torUri, method, params);
-
-    response = response["result"];
-
-    List<Wallet> wallets = List.empty();
-    for (Map<String, dynamic> pro in response) {
-      wallets.add(Wallet.fromJson(pro));
-    }
-
-    return wallets;
-  }
-
-  //Fetch address transactions history
-  Future<List<TransactionHistory>> fetchHistory(String address) async {
-    var method = "fetch-history";
-    //var params = {"address": address, "beginTx": start, "countTxs": txNumber};
-    var params = {"address": address};
-    var response = await _post(torUri, method, params);
-    response = response["result"];
-    //print("response: ${response.toString()}");
-    //response = List.from(response);
-
-    List<TransactionHistory> history = [];
-    for (Map<String, dynamic> pro in response) {
-      //print("transaction: ${pro.toString()}");
-      history.add(TransactionHistory.fromJson(pro));
-    }
-
-    return history;
-  }
-
-  //Fetch active delegation of a given
-  Future<List<Delegation>> fetchDelegation(
-      String address, int start, int txNumber) async {
-    var method = "get-address-delegations";
-    var params = {"address": address, "beginTx": start, "countTxs": txNumber};
-    var response = await _post(torUri, method, params);
-    response = response["result"];
-
-    List<Delegation> delegations = List.empty();
-    for (Map<String, dynamic> pro in response["states"]) {
-      delegations.add(Delegation.fromJson(pro));
-    }
-
-    return delegations;
-  }
 
 //send fund and returns transaction id
   Future<SendResponse> send(final MetaTxArg tx) async {
@@ -118,7 +117,7 @@ class ApiService {
     return SendResponse(status: false, txHash: response["params"]);
   }*/
 
-  Future<dynamic> _post(Uri url, String method, Map? params) {
+  Future<dynamic> _post(Uri url, String method, dynamic params) {
     _body["method"] = method;
     if (params != null) {
       _body["params"] = params;

@@ -18,11 +18,11 @@ and scaled blockchain.
 - [ ] GUI (Android, iOs, windows, Linux, mac, and web)
 ### Public API (port:33034)
 - [x] get_status
-- [ ] get_cliques
-- [ ] get_stakers
-- [ ] get_operations
-- [ ] get_endorsements
-- [ ] get_block
+- [x] get_cliques
+- [x] get_stakers
+- [x] get_operations
+- [x] get_endorsements
+- [x] get_block
 - [ ] get_graph_interval
 - [ ] get_addresses
 - [ ] send_operations
