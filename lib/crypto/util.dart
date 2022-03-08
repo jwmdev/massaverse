@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:convert';
 import 'package:hex/hex.dart';
@@ -140,5 +141,9 @@ class Util {
 //Converts Uint8List to List<int>
   static List<int> toSigned(Uint8List bytes) {
     return List.from(bytes);
+  }
+
+  static String doubleToMassa(num value) {
+    return (value * 1e9).toInt().toString();
   }
 }

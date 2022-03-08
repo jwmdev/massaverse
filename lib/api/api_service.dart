@@ -2,6 +2,7 @@ import 'package:massaverse/api/network_service.dart';
 import 'package:massaverse/models/block_response.dart';
 import 'package:massaverse/models/cliques_response.dart';
 import 'package:massaverse/models/operations_response.dart';
+import 'package:massaverse/models/send_transaction.dart';
 import 'package:massaverse/models/status_response.dart';
 
 class SendResponse {
@@ -92,6 +93,28 @@ class ApiService {
     return BlockResponse.decode(data);
   }
 
+  Future<dynamic> getAddresses(List<String> addresses) async {
+    var method = "get_addresses";
+    var params = [addresses];
+    var response = await _post(pubUri, method, params);
+    //print("addresses: $response");
+    response = response["result"];
+    return response;
+    //var data = Map<String, dynamic>.from(response);
+//return BlockResponse.decode(data);
+  }
+
+//send
+  Future<dynamic> sendTransaction(final SendTransaction tx) async {
+    var method = "send_operations";
+    var params = [
+      [tx.encode()]
+    ];
+    var response = await _post(pubUri, method, params);
+    //print("addresses: $response");
+    response = response["result"];
+    return response;
+  }
 /*
 
 //send fund and returns transaction id

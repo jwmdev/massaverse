@@ -5,6 +5,7 @@ import 'package:base_codecs/base_codecs.dart';
 import 'package:hash/hash.dart';
 import 'package:massaverse/crypto/secp256k1.dart';
 import 'package:massaverse/crypto/util.dart';
+import 'package:massaverse/crypto/varuint.dart';
 
 class Crypto {
   static Uint8List sha256(Uint8List hash) {
@@ -35,9 +36,11 @@ class Crypto {
     return base58Encode(data);
   }
 
-// converts base58 private key into [byte] string
-  static Uint8List parsePrivateBase58Check(String data) {
-    return base58Decode(data);
+// converts base58 private key into [PrivateKey] data type
+  static PrivateKey parsePrivateBase58Check(String data) {
+    final privb8 = base58Decode(data);
+    final privHex = Util.byteToHex(privb8);
+    return PrivateKey.fromHex(privHex);
   }
 
   static String deducePublicBase58Check(Uint8List data) {
@@ -110,5 +113,35 @@ function verify_data_signature(data, signature, pubkey) {
   static int getTimestamp() {
     var date = DateTime.now().millisecondsSinceEpoch / 1000;
     return date.floor() - 1514764800;
+  }
+
+/*
+function compute_bytes_compact(fee, expire_period, sender_pubkey, type_id, recipient_address, amount) {
+    var encoded_fee = xbqcrypto.Buffer.from(xbqcrypto.varint_encode(fee))
+    var encoded_expire_periode = xbqcrypto.Buffer.from(xbqcrypto.varint_encode(expire_period))
+    var encoded_type_id = xbqcrypto.Buffer.from(xbqcrypto.varint_encode(type_id))
+    var encoded_amount = xbqcrypto.Buffer.from(xbqcrypto.varint_encode(amount))
+    sender_pubkey = xbqcrypto.base58check_decode(sender_pubkey)
+    recipient_address = xbqcrypto.base58check_decode(recipient_address)
+    return Buffer.concat([encoded_fee, encoded_expire_periode, sender_pubkey, encoded_type_id, recipient_address, encoded_amount])
+}
+*/
+
+  static Uint8List computeBytesCompact(int fee, int expirePeriod,
+      String senderPubKey, int typeID, String receiptientAddress, int amount) {
+    final encodedFree = Varuint.encode(fee);
+    final encodedExpirePeriod = Varuint.encode(expirePeriod);
+    final encodedTypeID = Varuint.encode(typeID);
+    final encodedAmount = Varuint.encode(amount);
+    final senderPubKeyHex = Util.byteToHex(base58Decode(senderPubKey));
+    final recipientAddressHex =
+        Util.byteToHex(base58Decode(receiptientAddress));
+    final data = encodedFree +
+        encodedExpirePeriod +
+        senderPubKeyHex +
+        encodedTypeID +
+        recipientAddressHex +
+        encodedAmount;
+    return Util.hexToBytes(data);
   }
 }

@@ -7,9 +7,6 @@ import 'package:massaverse/crypto/util.dart';
 void main() {
   group('Crypto', () {
     test('test hash sha256', () {
-      //String privateKeyHex = "VgrspMAX6zKVUHL3dDiyLy8RffCKGDprwvatv5Azz9cDwGAj8";
-      //String publicKey = "6nwo2GeQhSmdGfazqMyCFJs75REQ8QEKsHUvd7iUiq8dadVHgf";
-      //String address = "";
       var hashHex =
           "60bf6c46a8f6d9a02bb5a0f1f8691eb0d7d0cf649424f4d385bdf31fc261b4be";
       var hash = Util.hexToBytes(hashHex);

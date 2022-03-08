@@ -234,6 +234,9 @@ class OperationContent {
 
 class Op {
   Transaction? transaction;
+  Roll? rollBuy;
+  Roll? rollSell;
+  ExecuteSC? sc;
 
   Op({this.transaction});
 
@@ -241,6 +244,9 @@ class Op {
     transaction = json['Transaction'] != null
         ? Transaction.decode(json['Transaction'])
         : null;
+    rollBuy = json['RollBuy'] != null ? Roll.decode(json['RollBuy']) : null;
+    rollSell = json['RollSell'] != null ? Roll.decode(json['RollSell']) : null;
+    sc = json['ExecuteSC'] != null ? ExecuteSC.decode(json['ExecuteSC']) : null;
   }
 
   Map<String, dynamic> encode() {
@@ -289,5 +295,44 @@ class Operations {
     _data['content'] = content.encode();
     _data['signature'] = signature;
     return _data;
+  }
+}
+
+class Roll {
+  //RollBuy or RollSell
+  int? rollCount;
+  Roll({this.rollCount});
+  Roll.decode(Map<String, dynamic> json) {
+    rollCount = json['roll_count'];
+  }
+  Map<String, dynamic> encode() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['roll_count'] = rollCount;
+    return data;
+  }
+}
+
+class ExecuteSC {
+  List<int>? data;
+  int? maxGas;
+  String? coins;
+  String? gasPrice;
+
+  ExecuteSC({this.data, this.maxGas, this.coins, this.gasPrice});
+
+  ExecuteSC.decode(Map<String, dynamic> json) {
+    data = json['data'].cast<int>();
+    maxGas = int.parse(json['max_gas']);
+    coins = json['coins'];
+    gasPrice = json['gas_price'];
+  }
+
+  Map<String, dynamic> encode() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['data'] = data;
+    data['max_gas'] = maxGas;
+    data['coins'] = coins;
+    data['gas_price'] = gasPrice;
+    return data;
   }
 }

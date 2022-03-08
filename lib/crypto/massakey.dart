@@ -22,9 +22,8 @@ class MassaKey {
       //if (!Util.isHexString(privateKeyHex)) {
       //  throw ("the provide key is not the correct hex string");
       //}
-      var privb8 = Crypto.parsePrivateBase58Check(privateKeyBase58);
-      var privHex = Util.byteToHex(privb8);
-      _privateKey = PrivateKey.fromHex(privHex);
+
+      _privateKey = Crypto.parsePrivateBase58Check(privateKeyBase58);
       _publicKey = _privateKey.publicKey;
       _address = Crypto.deduceAddress(_publicKey);
       _addressThread = Crypto.getAddressThread(_address);
