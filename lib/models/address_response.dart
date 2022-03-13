@@ -24,7 +24,7 @@ class AddressResponse {
   late final SceLedgerInfo sceLedgerInfo;
   late final int thread;
 
-  AddressResponse.fromJson(Map<String, dynamic> json) {
+  AddressResponse.decode(Map<String, dynamic> json) {
     address = json['address'];
     blockDraws = List.castFrom<dynamic, dynamic>(json['block_draws']);
     blocksCreated = List.castFrom<dynamic, dynamic>(json['blocks_created']);
@@ -34,16 +34,16 @@ class AddressResponse {
         List.castFrom<dynamic, dynamic>(json['involved_in_endorsements']);
     involvedInOperations =
         List.castFrom<dynamic, String>(json['involved_in_operations']);
-    ledgerInfo = LedgerInfo.fromJson(json['ledger_info']);
+    ledgerInfo = LedgerInfo.decode(json['ledger_info']);
     productionStats = List.from(json['production_stats'])
-        .map((e) => ProductionStats.fromJson(e))
+        .map((e) => ProductionStats.decode(e))
         .toList();
-    rolls = Rolls.fromJson(json['rolls']);
-    sceLedgerInfo = SceLedgerInfo.fromJson(json['sce_ledger_info']);
+    rolls = Rolls.decode(json['rolls']);
+    sceLedgerInfo = SceLedgerInfo.decode(json['sce_ledger_info']);
     thread = json['thread'];
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> encode() {
     final _data = <String, dynamic>{};
     _data['address'] = address;
     _data['block_draws'] = blockDraws;
@@ -51,10 +51,10 @@ class AddressResponse {
     _data['endorsement_draws'] = endorsementDraws;
     _data['involved_in_endorsements'] = involvedInEndorsements;
     _data['involved_in_operations'] = involvedInOperations;
-    _data['ledger_info'] = ledgerInfo.toJson();
-    _data['production_stats'] = productionStats.map((e) => e.toJson()).toList();
-    _data['rolls'] = rolls.toJson();
-    _data['sce_ledger_info'] = sceLedgerInfo.toJson();
+    _data['ledger_info'] = ledgerInfo.encode();
+    _data['production_stats'] = productionStats.map((e) => e.encode()).toList();
+    _data['rolls'] = rolls.encode();
+    _data['sce_ledger_info'] = sceLedgerInfo.encode();
     _data['thread'] = thread;
     return _data;
   }
@@ -70,17 +70,17 @@ class LedgerInfo {
   late final FinalLedgerInfo finalLedgerInfo;
   late final int lockedBalance;
 
-  LedgerInfo.fromJson(Map<String, dynamic> json) {
+  LedgerInfo.decode(Map<String, dynamic> json) {
     candidateLedgerInfo =
-        CandidateLedgerInfo.fromJson(json['candidate_ledger_info']);
-    finalLedgerInfo = FinalLedgerInfo.fromJson(json['final_ledger_info']);
-    lockedBalance = json['locked_balance'];
+        CandidateLedgerInfo.decode(json['candidate_ledger_info']);
+    finalLedgerInfo = FinalLedgerInfo.decode(json['final_ledger_info']);
+    lockedBalance = int.parse(json['locked_balance']);
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> encode() {
     final _data = <String, dynamic>{};
-    _data['candidate_ledger_info'] = candidateLedgerInfo.toJson();
-    _data['final_ledger_info'] = finalLedgerInfo.toJson();
+    _data['candidate_ledger_info'] = candidateLedgerInfo.encode();
+    _data['final_ledger_info'] = finalLedgerInfo.encode();
     _data['locked_balance'] = lockedBalance;
     return _data;
   }
@@ -92,11 +92,11 @@ class CandidateLedgerInfo {
   });
   late final double balance;
 
-  CandidateLedgerInfo.fromJson(Map<String, dynamic> json) {
+  CandidateLedgerInfo.decode(Map<String, dynamic> json) {
     balance = double.parse(json['balance']);
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> encode() {
     final _data = <String, dynamic>{};
     _data['balance'] = balance;
     return _data;
@@ -109,11 +109,11 @@ class FinalLedgerInfo {
   });
   late final double balance;
 
-  FinalLedgerInfo.fromJson(Map<String, dynamic> json) {
-    balance = json['balance'];
+  FinalLedgerInfo.decode(Map<String, dynamic> json) {
+    balance = double.parse(json['balance']);
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> encode() {
     final _data = <String, dynamic>{};
     _data['balance'] = balance;
     return _data;
@@ -132,14 +132,14 @@ class ProductionStats {
   late final int nokCount;
   late final int okCount;
 
-  ProductionStats.fromJson(Map<String, dynamic> json) {
+  ProductionStats.decode(Map<String, dynamic> json) {
     cycle = int.parse(json['cycle']);
     isFinal = json['is_final'];
     nokCount = int.parse(json['nok_count']);
     okCount = int.parse(json['ok_count']);
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> encode() {
     final _data = <String, dynamic>{};
     _data['cycle'] = cycle;
     _data['is_final'] = isFinal;
@@ -159,13 +159,13 @@ class Rolls {
   late final int candidateRolls;
   late final int finalRolls;
 
-  Rolls.fromJson(Map<String, dynamic> json) {
+  Rolls.decode(Map<String, dynamic> json) {
     activeRolls = int.parse(json['active_rolls']);
     candidateRolls = int.parse(json['candidate_rolls']);
     finalRolls = int.parse(json['final_rolls']);
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> encode() {
     final _data = <String, dynamic>{};
     _data['active_rolls'] = activeRolls;
     _data['candidate_rolls'] = candidateRolls;
@@ -184,16 +184,16 @@ class SceLedgerInfo {
   late final Datastore datastore;
   late final Null module;
 
-  SceLedgerInfo.fromJson(Map<String, dynamic> json) {
+  SceLedgerInfo.decode(Map<String, dynamic> json) {
     balance = int.parse(json['balance']);
-    datastore = Datastore.fromJson(json['datastore']);
+    datastore = Datastore.decode(json['datastore']);
     module = null;
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> encode() {
     final _data = <String, dynamic>{};
     _data['balance'] = balance;
-    _data['datastore'] = datastore.toJson();
+    _data['datastore'] = datastore.encode();
     _data['module'] = module;
     return _data;
   }
@@ -202,9 +202,9 @@ class SceLedgerInfo {
 class Datastore {
   Datastore();
 
-  Datastore.fromJson(Map json);
+  Datastore.decode(Map json);
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> encode() {
     final _data = <String, dynamic>{};
     return _data;
   }

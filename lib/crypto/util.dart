@@ -143,7 +143,7 @@ class Util {
     return List.from(bytes);
   }
 
-  static String doubleToMassa(num value) {
-    return (value * 1e9).toInt().toString();
+  static int doubleToMassaInt(num value) {
+    return (value * 1e9).toInt();
   }
 }

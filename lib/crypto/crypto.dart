@@ -1,11 +1,13 @@
-import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:base_codecs/base_codecs.dart';
+import 'package:decimal/decimal.dart';
 import 'package:hash/hash.dart';
 import 'package:massaverse/crypto/secp256k1.dart';
 import 'package:massaverse/crypto/util.dart';
 import 'package:massaverse/crypto/varuint.dart';
+import 'package:massaverse/models/send_transaction.dart';
+import 'package:massaverse/crypto/secp256k1.dart';
 
 class Crypto {
   static Uint8List sha256(Uint8List hash) {
@@ -100,6 +102,7 @@ function verify_data_signature(data, signature, pubkey) {
 
   static Signature signData(Uint8List data, PrivateKey privKey) {
     final dataHash = Crypto.sha256(data);
+    print("hash: $dataHash");
     final hexHash = Util.byteToHex(dataHash);
     return privKey.signature(hexHash);
   }
@@ -127,21 +130,169 @@ function compute_bytes_compact(fee, expire_period, sender_pubkey, type_id, recip
 }
 */
 
+  static signTransaction(SendTransaction tx, String privateKey) {
+    var feeInt =
+        int.parse((Decimal.parse(tx.fee) * Decimal.parse("1e9")).toString());
+    print("parsed fee: 1100000000 ? $feeInt");
+    var amountInt =
+        int.parse((Decimal.parse(tx.amount) * Decimal.parse("1e9")).toString());
+
+    print("parsed amount: 10987640000 ? $amountInt");
+
+    var encodedData = Crypto.computeBytesCompact(feeInt, tx.expirePeriod,
+        tx.senderPublicKey, 0, tx.recipientAddress, amountInt);
+    print("encoded data: $encodedData");
+
+    List<int> en = [
+      128,
+      214,
+      194,
+      140,
+      4,
+      181,
+      231,
+      2,
+      3,
+      21,
+      198,
+      231,
+      83,
+      44,
+      252,
+      8,
+      188,
+      17,
+      10,
+      234,
+      60,
+      122,
+      112,
+      61,
+      102,
+      246,
+      37,
+      208,
+      114,
+      38,
+      128,
+      9,
+      209,
+      39,
+      35,
+      187,
+      241,
+      252,
+      7,
+      17,
+      85,
+      0,
+      99,
+      33,
+      108,
+      13,
+      139,
+      226,
+      50,
+      117,
+      214,
+      50,
+      121,
+      196,
+      185,
+      166,
+      136,
+      21,
+      205,
+      244,
+      35,
+      162,
+      3,
+      183,
+      191,
+      93,
+      163,
+      207,
+      221,
+      210,
+      115,
+      14,
+      167,
+      53,
+      192,
+      169,
+      168,
+      247,
+      40
+    ];
+    List<int> hash = [
+      96,
+      99,
+      242,
+      112,
+      89,
+      231,
+      19,
+      51,
+      108,
+      15,
+      44,
+      15,
+      185,
+      59,
+      5,
+      10,
+      66,
+      235,
+      74,
+      182,
+      137,
+      61,
+      155,
+      148,
+      247,
+      66,
+      47,
+      92,
+      49,
+      24,
+      52,
+      126
+    ];
+
+    var encodedDataRef = Uint8List.fromList(en);
+
+    print("the two encoded data are not equal");
+    // print(encodedData);
+    //print(encodedDataRef);
+    for (int i = 0; i < encodedData.length; i++) {
+      print("$i: ${encodedData[i]}? ${encodedDataRef[i]}");
+    }
+
+    var privKey = Crypto.parsePrivateBase58Check(privateKey);
+    var signature = Crypto.signData(encodedData, privKey);
+    var r = Util.bigIntToHex(signature.R);
+    print("r = $r");
+    //Util.bigIntToBytes(bigInt)
+    var s = Util.bigIntToHex(signature.S);
+    print("s = $s");
+    var sig = Util.bigIntToHex(signature.R) + Util.bigIntToHex(signature.S);
+    tx.signature = base58Encode(Util.hexToBytes(s));
+  }
+
   static Uint8List computeBytesCompact(int fee, int expirePeriod,
       String senderPubKey, int typeID, String receiptientAddress, int amount) {
-    final encodedFree = Varuint.encode(fee);
-    final encodedExpirePeriod = Varuint.encode(expirePeriod);
-    final encodedTypeID = Varuint.encode(typeID);
-    final encodedAmount = Varuint.encode(amount);
-    final senderPubKeyHex = Util.byteToHex(base58Decode(senderPubKey));
-    final recipientAddressHex =
-        Util.byteToHex(base58Decode(receiptientAddress));
-    final data = encodedFree +
+    final encodedFee = Varint.encode(fee);
+    final encodedExpirePeriod = Varint.encode(expirePeriod);
+    final encodedTypeID = Varint.encode(typeID);
+    final encodedAmount = Varint.encode(amount);
+    final senderPubKeyHex = base58Decode(senderPubKey);
+    final recipientAddressHex = base58Decode(receiptientAddress);
+    final data = encodedFee +
         encodedExpirePeriod +
         senderPubKeyHex +
         encodedTypeID +
         recipientAddressHex +
         encodedAmount;
-    return Util.hexToBytes(data);
+    return Uint8List.fromList(data);
   }
 }

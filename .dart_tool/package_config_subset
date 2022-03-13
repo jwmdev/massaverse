@@ -30,6 +30,10 @@ collection
 2.12
 file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.15.0/
 file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.15.0/lib/
+convert
+2.12
+file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/convert-3.0.1/
+file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/convert-3.0.1/lib/
 crypto
 2.12
 file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-3.0.1/
@@ -38,6 +42,10 @@ cupertino_icons
 2.12
 file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.4/
 file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.4/lib/
+decimal
+2.14
+file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/decimal-2.1.0/
+file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/decimal-2.1.0/lib/
 fake_async
 2.12
 file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0/
@@ -62,6 +70,10 @@ http_parser
 2.12
 file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.0/
 file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.0/lib/
+js
+2.16
+file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.4/
+file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.4/lib/
 lints
 2.12
 file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1/
@@ -82,6 +94,14 @@ path
 2.12
 file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.0/
 file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.0/lib/
+pointycastle
+2.12
+file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/pointycastle-3.5.2/
+file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/pointycastle-3.5.2/lib/
+rational
+2.14
+file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/rational-2.1.0/
+file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/rational-2.1.0/lib/
 retry
 2.12
 file:///home/jwmdev/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/retry-3.1.0/

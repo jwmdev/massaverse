@@ -27,12 +27,11 @@ dependencies:
 
   # base_codecs support base16, base32, base58 and base85
   base_codecs: ^1.0.1
-
   hex: ^0.2.0
-
   retry: ^3.1.0  #retry connections
-
   http: ^0.13.4 # http for client connect
+  decimal: ^2.1.0 #precision calculation
+  pointycastle: ^3.5.2
 
 dev_dependencies:
   flutter_test:

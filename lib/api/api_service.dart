@@ -1,4 +1,5 @@
 import 'package:massaverse/api/network_service.dart';
+import 'package:massaverse/models/address_response.dart';
 import 'package:massaverse/models/block_response.dart';
 import 'package:massaverse/models/cliques_response.dart';
 import 'package:massaverse/models/operations_response.dart';
@@ -99,9 +100,13 @@ class ApiService {
     var response = await _post(pubUri, method, params);
     //print("addresses: $response");
     response = response["result"];
+
+    /*var data = List<dynamic>.from(response);
+    if (data.isNotEmpty) {
+      return AddressResponse.decode(
+          data[0]); //currently returning a single operation
+    }*/
     return response;
-    //var data = Map<String, dynamic>.from(response);
-//return BlockResponse.decode(data);
   }
 
 //send
@@ -112,7 +117,7 @@ class ApiService {
     ];
     var response = await _post(pubUri, method, params);
     //print("addresses: $response");
-    response = response["result"];
+    //response = response["result"];
     return response;
   }
 /*

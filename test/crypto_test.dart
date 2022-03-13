@@ -5,6 +5,14 @@ import 'package:massaverse/crypto/crypto.dart';
 import 'package:massaverse/crypto/util.dart';
 
 void main() {
+  const privateKey = "26K5LobGsmCeuRm6YMifrsUqutZ8uKs8p34KgbZgC6ECPhMaoM";
+  const publicKey = "6zpnyRf8ZLTeqWL1BVhB5sPByQqDJpJGtERQjF9Hc4yKjQA7ww";
+  const address = "oj8ZWRWodDXm7UeEkm9XgC332kYXcEeFabEaUe7XjWkkjf5zU";
+
+  const privateKey2 = "2QXSCQBGtKrHHBtraNbDhQEzNJ4kTJh5P7b1hfSMT4YPEkmjbH";
+  const publicKey2 = "5F9xcai1kRyLvAPYiVYFx9oqrwJkn18G3syznDB75akZTQqTkG";
+  const address2 = "kfA75kiE5bTTxmhnghsK1xWeHFzMabcgUY1sf5aGnBgKnypne";
+
   group('Crypto', () {
     test('test hash sha256', () {
       var hashHex =
@@ -55,6 +63,15 @@ void main() {
       var dec = Crypto.base58Decode(encodedCheck);
 
       expect(encodedCheck, Crypto.base58Encode(dec));
+    });
+
+    test("signature", () {
+      const str = "this is a message to be tested";
+      var data = Util.stringToBytesUtf8(str);
+      var privKey = Crypto.parsePrivateBase58Check(privateKey);
+      var sig = Crypto.signData(data, privKey);
+      var valid = Crypto.verify(data, sig, privKey.publicKey);
+      expect(true, valid);
     });
   });
 }

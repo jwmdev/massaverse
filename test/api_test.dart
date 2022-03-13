@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:massaverse/api/api_service.dart';
 import 'package:massaverse/crypto/crypto.dart';
@@ -58,26 +59,31 @@ void main() {
     test("Get Addresses", () async {
       var addr = [address];
       var resp = await api.getAddresses(addr);
-      print("addresses response: ${resp}");
+      if (resp != null) {
+        //print("addresses response: ${resp}");
+      } else {
+        // print("no info obtained");
+      }
     });
     test("Send transactions", () async {
       String address = "";
-      var amount = 10.98764;
-      String amountString = Util.doubleToMassa(amount);
-      var fee = 0.98764;
-      String feeString = Util.doubleToMassa(fee);
-      int expTime = 56987321;
+      var amount = Decimal.parse("10.98764");
+      var fee = Decimal.parse("1.1");
+      int expirePeriod = 46005;
 
       var tx = SendTransaction(
-          amount: amountString,
-          fee: feeString,
+          amount: amount.toString(),
+          fee: fee.toString(),
           recipientAddress: address2,
           senderPublicKey: publicKey,
-          expirePeriod: expTime);
-      var priv = Crypto.parsePrivateBase58Check(privateKey);
-      var txEcoded = tx.encode();
-      //var signature = Crypto.signData(txEncoded, priv);
+          expirePeriod: expirePeriod);
+      Crypto.signTransaction(tx, privateKey);
+      print(
+          "reference signature: DuC3rPZPqMvZdh6EvM6Ch6Rc51uGgDZ8zw1biEmZFuwFcoU26sbKMyJTQPSXvtoyvs63jL48CGDBuTCRqVpgRUzVQ6gSj");
       print("tx : ${tx.encode()}");
+
+      //var resp = await api.sendTransaction(tx);
+      //print("send transaction respons: $resp");
     });
   });
 }
