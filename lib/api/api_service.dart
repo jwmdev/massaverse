@@ -2,6 +2,7 @@ import 'package:massaverse/api/network_service.dart';
 import 'package:massaverse/models/address_response.dart';
 import 'package:massaverse/models/block_response.dart';
 import 'package:massaverse/models/cliques_response.dart';
+import 'package:massaverse/models/massa_info.dart';
 import 'package:massaverse/models/operations_response.dart';
 import 'package:massaverse/models/send_transaction.dart';
 import 'package:massaverse/models/status_response.dart';
@@ -26,10 +27,23 @@ class ApiService {
 
   final Uri privUri = Uri.http("test.massa.net:33034", "");
   final Uri pubUri = Uri.http("test.massa.net:33035", "");
+  final Uri massaApi = Uri.https("test.massa.net", "api/v2/info");
 
   //final Uri proxyUri = Uri.http("proxy.net-main.metahashnetwork.com:9999", "");
 
   final NetworkService _client = NetworkService();
+
+  Future<dynamic> getInfo() async {
+    var response = await _get(massaApi);
+    //print(response);
+    response = response["result"];
+    if (response != null) {
+      var data = Map<String, dynamic>.from(response);
+      return MassaInfo.decode(data);
+    } else {
+      return null;
+    }
+  }
 
   Future<dynamic> getStatus() async {
     var method = "get_status";
@@ -152,5 +166,9 @@ class ApiService {
     }
     //print("body: ")
     return _client.post(url, body: _body);
+  }
+
+  Future<dynamic> _get(Uri url) {
+    return _client.get(url);
   }
 }

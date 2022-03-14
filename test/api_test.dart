@@ -17,6 +17,10 @@ void main() {
     const publicKey2 = "5F9xcai1kRyLvAPYiVYFx9oqrwJkn18G3syznDB75akZTQqTkG";
     const address2 = "kfA75kiE5bTTxmhnghsK1xWeHFzMabcgUY1sf5aGnBgKnypne";
 
+    test("Get info", () async {
+      var resp = await api.getStatus();
+      //print("info response: ${resp.encode()}");
+    });
     test("Get status", () async {
       var resp = await api.getStatus();
       //print("status response: ${resp.connectedNodes}");
@@ -69,7 +73,10 @@ void main() {
       String address = "";
       var amount = Decimal.parse("10.98764");
       var fee = Decimal.parse("1.1");
-      int expirePeriod = 46005;
+
+      //var info = await api.getInfo();
+      //if (info == null) return;
+      int expirePeriod = 46005; // info.lastPeriod + 5;
 
       var tx = SendTransaction(
           amount: amount.toString(),
@@ -78,8 +85,8 @@ void main() {
           senderPublicKey: publicKey,
           expirePeriod: expirePeriod);
       Crypto.signTransaction(tx, privateKey);
-      print(
-          "reference signature: DuC3rPZPqMvZdh6EvM6Ch6Rc51uGgDZ8zw1biEmZFuwFcoU26sbKMyJTQPSXvtoyvs63jL48CGDBuTCRqVpgRUzVQ6gSj");
+      //print(
+      //    "reference signature: DuC3rPZPqMvZdh6EvM6Ch6Rc51uGgDZ8zw1biEmZFuwFcoU26sbKMyJTQPSXvtoyvs63jL48CGDBuTCRqVpgRUzVQ6gSj");
       print("tx : ${tx.encode()}");
 
       //var resp = await api.sendTransaction(tx);

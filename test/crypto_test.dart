@@ -18,7 +18,7 @@ void main() {
       var hashHex =
           "60bf6c46a8f6d9a02bb5a0f1f8691eb0d7d0cf649424f4d385bdf31fc261b4be";
       var hash = Util.hexToBytes(hashHex);
-      var result = Crypto.sha256(hash);
+      var result = Crypto.sha256Digest(hash);
       Uint8List output = Uint8List.fromList([
         190,
         194,
@@ -68,9 +68,10 @@ void main() {
     test("signature", () {
       const str = "this is a message to be tested";
       var data = Util.stringToBytesUtf8(str);
-      var privKey = Crypto.parsePrivateBase58Check(privateKey);
-      var sig = Crypto.signData(data, privKey);
-      var valid = Crypto.verify(data, sig, privKey.publicKey);
+      var privKey = Crypto.getPrivateKeyFromBase58(privateKey);
+      var pubKey = Crypto.getPublicKeyFromPrivate(privKey);
+      var sig = Crypto.signData(privKey, data);
+      var valid = Crypto.verify(data, sig, pubKey);
       expect(true, valid);
     });
   });
