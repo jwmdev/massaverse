@@ -17,6 +17,10 @@ void main() {
     const publicKey2 = "5F9xcai1kRyLvAPYiVYFx9oqrwJkn18G3syznDB75akZTQqTkG";
     const address2 = "kfA75kiE5bTTxmhnghsK1xWeHFzMabcgUY1sf5aGnBgKnypne";
 
+    test("Get info", () async {
+      var resp = await api.getInfo();
+      print("info response: ${resp}");
+    });
     /*test("Get status", () async {
       var resp = await api.getStatus();
       //print("status response: ${resp.connectedNodes}");
@@ -70,7 +74,7 @@ void main() {
       var amount = Decimal.parse("10.98764");
       var fee = Decimal.parse("1.1");
       // int expirePeriod = 46005;
-      int expirePeriod = 59337 + 5;
+      int expirePeriod = 59647 + 5;
 
       var tx = SendTransaction(
           amount: amount.toString(),
