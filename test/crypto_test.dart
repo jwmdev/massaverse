@@ -60,15 +60,15 @@ void main() {
       const encodedCheck =
           "5Kd3NBUAdUnhyzenEwVLy9pBKxSwXvE9FMPyR4UKZvpe6E3AgLr";
 
-      var dec = Crypto.base58Decode(encodedCheck);
+      var dec = Crypto.base58CheckDecode(encodedCheck);
 
-      expect(encodedCheck, Crypto.base58Encode(dec));
+      expect(encodedCheck, Crypto.base58CheckEncode(dec));
     });
 
     test("signature", () {
       const str = "this is a message to be tested";
       var data = Util.stringToBytesUtf8(str);
-      var privKey = Crypto.parsePrivateBase58Check(privateKey);
+      var privKey = Crypto.getPrivateKeyFromBase58Check(privateKey);
       var sig = Crypto.signData(data, privKey);
       var valid = Crypto.verify(data, sig, privKey.publicKey);
       expect(true, valid);

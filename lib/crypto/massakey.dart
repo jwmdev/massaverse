@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:massaverse/crypto/crypto.dart';
 import 'package:massaverse/crypto/secp256k1.dart';
-import 'package:massaverse/crypto/util.dart';
 
 class MassaKey {
   late PrivateKey _privateKey;
@@ -15,17 +14,12 @@ class MassaKey {
     if (privateKeyBase58 == null) {
       _privateKey = PrivateKey.generate();
       _publicKey = _privateKey.publicKey;
-      _address = Crypto.deduceAddress(_publicKey);
+      _address = Crypto.getAddress(_publicKey);
       _addressThread = Crypto.getAddressThread(_address);
     } else {
-      //check if it correct hex string
-      //if (!Util.isHexString(privateKeyHex)) {
-      //  throw ("the provide key is not the correct hex string");
-      //}
-
-      _privateKey = Crypto.parsePrivateBase58Check(privateKeyBase58);
+      _privateKey = Crypto.getPrivateKeyFromBase58Check(privateKeyBase58);
       _publicKey = _privateKey.publicKey;
-      _address = Crypto.deduceAddress(_publicKey);
+      _address = Crypto.getAddress(_publicKey);
       _addressThread = Crypto.getAddressThread(_address);
     }
   }
@@ -36,20 +30,25 @@ class MassaKey {
 
 // returns private key in base58 format
   String privateKey() {
-    return Crypto.deducePrivateBase58Check(
-        Util.hexToBytes(_privateKey.toHex()));
+    return Crypto.getBase58CheckFromPrivateKey(_privateKey);
+  }
+
+  String privateKeyHex() {
+    return _privateKey.toHex();
   }
 
   String publicCompressedHex() {
     return _publicKey.toCompressedHex();
   }
 
-  String publicHex() {
+  /// returns public key encoded in [hex] format
+  String publicKeyHex() {
     return _publicKey.toHex();
   }
 
+  /// returns public key encoded in [base58Check] format
   String publicKey() {
-    return Crypto.getPublicBase58(_publicKey);
+    return Crypto.getBase58CheckFromPublicKey(_publicKey);
   }
 
   String address() {
