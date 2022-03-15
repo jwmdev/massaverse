@@ -1,23 +1,22 @@
-class SendTransaction {
-  late final String amount;
+class SellRolls {
+  late final String rolls;
   late final String fee;
   late final String recipientAddress;
   late final String senderPublicKey;
   late final int expirePeriod;
-  late final SendTxContent content;
+  late final SellRollsContent content;
   String? signature;
 
-  SendTransaction({
-    required this.amount,
+  SellRolls({
+    required this.rolls,
     required this.fee,
     required this.recipientAddress,
     required this.senderPublicKey,
     required this.expirePeriod,
   }) {
-    final transaction =
-        Transaction(amount: amount, recipientAddress: recipientAddress);
-    final operation = SendOp(transaction: transaction);
-    content = SendTxContent(
+    final roll = RollSell(rollCount: rolls);
+    final operation = SellRollOp(roll: roll);
+    content = SellRollsContent(
         expirePeriod: expirePeriod,
         fee: fee,
         op: operation,
@@ -39,8 +38,8 @@ class SendTransaction {
   }
 }
 
-class SendTxContent {
-  SendTxContent({
+class SellRollsContent {
+  SellRollsContent({
     required this.expirePeriod,
     required this.fee,
     required this.op,
@@ -48,7 +47,7 @@ class SendTxContent {
   });
   late final int expirePeriod;
   late final String fee;
-  late final SendOp op;
+  late final SellRollOp op;
   late final String senderPublicKey;
 
   Map<String, dynamic> encode() {
@@ -61,31 +60,28 @@ class SendTxContent {
   }
 }
 
-class SendOp {
-  SendOp({
-    required this.transaction,
+class SellRollOp {
+  SellRollOp({
+    required this.roll,
   });
-  late final Transaction transaction;
+  late final RollSell roll;
 
   Map<String, dynamic> encode() {
     final _data = <String, dynamic>{};
-    _data['Transaction'] = transaction.encode();
+    _data['RollSell'] = roll.encode();
     return _data;
   }
 }
 
-class Transaction {
-  Transaction({
-    required this.amount,
-    required this.recipientAddress,
+class RollSell {
+  RollSell({
+    required this.rollCount,
   });
-  late final String amount;
-  late final String recipientAddress;
+  late final String rollCount;
 
   Map<String, dynamic> encode() {
     final _data = <String, dynamic>{};
-    _data['amount'] = amount;
-    _data['recipient_address'] = recipientAddress;
+    _data['roll_count'] = rollCount;
     return _data;
   }
 }
