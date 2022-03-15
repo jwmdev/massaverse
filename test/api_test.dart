@@ -91,7 +91,7 @@ void main() {
           recipientAddress: address2,
           senderPublicKey: publicKey,
           expirePeriod: expirePeriod);
-      Crypto.signTransaction(tx, privateKey);
+      Crypto.signSendTransaction(tx, privateKey);
       print("tx : ${tx.encode()}");
 
       var resp = await api.sendTransaction(tx);

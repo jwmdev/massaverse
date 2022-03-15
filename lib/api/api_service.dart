@@ -1,9 +1,11 @@
 import 'package:massaverse/api/network_service.dart';
 import 'package:massaverse/models/address_response.dart';
 import 'package:massaverse/models/block_response.dart';
+import 'package:massaverse/models/buy_roll.dart';
 import 'package:massaverse/models/cliques_response.dart';
 import 'package:massaverse/models/massa_info.dart';
 import 'package:massaverse/models/operations_response.dart';
+import 'package:massaverse/models/sell_roll.dart';
 import 'package:massaverse/models/send_transaction.dart';
 import 'package:massaverse/models/status_response.dart';
 
@@ -123,8 +125,32 @@ class ApiService {
     return response;
   }
 
-//send
+//send transaction
   Future<dynamic> sendTransaction(final SendTransaction tx) async {
+    var method = "send_operations";
+    var params = [
+      [tx.encode()]
+    ];
+    var response = await _post(pubUri, method, params);
+    //print("addresses: $response");
+    //response = response["result"];
+    return response;
+  }
+
+  //buy rolls
+  Future<dynamic> buyRolls(final BuyRolls tx) async {
+    var method = "send_operations";
+    var params = [
+      [tx.encode()]
+    ];
+    var response = await _post(pubUri, method, params);
+    //print("addresses: $response");
+    //response = response["result"];
+    return response;
+  }
+
+  //sell rolls
+  Future<dynamic> sellRolls(final SellRolls tx) async {
     var method = "send_operations";
     var params = [
       [tx.encode()]

@@ -5,6 +5,8 @@ import 'package:crypto/crypto.dart';
 import 'package:decimal/decimal.dart';
 import 'package:massaverse/crypto/util.dart';
 import 'package:massaverse/crypto/varuint.dart';
+import 'package:massaverse/models/buy_roll.dart';
+import 'package:massaverse/models/sell_roll.dart';
 import 'package:massaverse/models/send_transaction.dart';
 import 'package:pointycastle/export.dart';
 
@@ -121,18 +123,18 @@ class Crypto {
     return parseAddress(address)[0] >> 3;
   }
 
-  static signTransaction(SendTransaction tx, String privateKey) {
+  static signSendTransaction(SendTransaction tx, String privateKey) {
     var feeInt =
         int.parse((Decimal.parse(tx.fee) * Decimal.parse("1e9")).toString());
     var amountInt =
         int.parse((Decimal.parse(tx.amount) * Decimal.parse("1e9")).toString());
-    var encodedData = computeBytesCompact(feeInt, tx.expirePeriod,
+    var encodedData = sendTransactionBytesCompact(feeInt, tx.expirePeriod,
         tx.senderPublicKey, 0, tx.recipientAddress, amountInt);
-    print("encoded data: $encodedData");
+    //print("encoded data: $encodedData");
 
     var privKey = Crypto.getPrivateKeyFromBase58(privateKey);
     var dataHash = sha256Digest(encodedData);
-    print("hash: $dataHash");
+    //print("hash: $dataHash");
     var signature = signData(privKey, encodedData);
     var r = Util.bigIntToBytes(signature.r);
     var rb58 = base58Encode(r);
@@ -148,7 +150,37 @@ class Crypto {
     tx.signature = base58Encode(Uint8List.fromList(sig));
   }
 
-  static Uint8List computeBytesCompact(int fee, int expirePeriod,
+  static signBuyRolls(BuyRolls tx, String privateKey) {
+    var feeInt =
+        int.parse((Decimal.parse(tx.fee) * Decimal.parse("1e9")).toString());
+    var amountInt =
+        int.parse((Decimal.parse(tx.rolls) * Decimal.parse("1e9")).toString());
+    var encodedData = rollsBytesCompact(
+        feeInt, tx.expirePeriod, tx.senderPublicKey, 1, amountInt);
+    var privKey = Crypto.getPrivateKeyFromBase58(privateKey);
+    var signature = signData(privKey, encodedData);
+    var r = Util.bigIntToBytes(signature.r);
+    var s = Util.bigIntToBytes(signature.s);
+    var sig = r + s;
+    tx.signature = base58Encode(Uint8List.fromList(sig));
+  }
+
+  static signSellRolls(SellRolls tx, String privateKey) {
+    var feeInt =
+        int.parse((Decimal.parse(tx.fee) * Decimal.parse("1e9")).toString());
+    var amountInt =
+        int.parse((Decimal.parse(tx.rolls) * Decimal.parse("1e9")).toString());
+    var encodedData = rollsBytesCompact(
+        feeInt, tx.expirePeriod, tx.senderPublicKey, 2, amountInt);
+    var privKey = Crypto.getPrivateKeyFromBase58(privateKey);
+    var signature = signData(privKey, encodedData);
+    var r = Util.bigIntToBytes(signature.r);
+    var s = Util.bigIntToBytes(signature.s);
+    var sig = r + s;
+    tx.signature = base58Encode(Uint8List.fromList(sig));
+  }
+
+  static Uint8List sendTransactionBytesCompact(int fee, int expirePeriod,
       String senderPubKey, int typeID, String receiptientAddress, int amount) {
     final encodedFee = Varint.encode(fee);
     final encodedExpirePeriod = Varint.encode(expirePeriod);
@@ -161,6 +193,21 @@ class Crypto {
         senderPubKeyHex +
         encodedTypeID +
         recipientAddressHex +
+        encodedAmount;
+    return Uint8List.fromList(data);
+  }
+
+  static Uint8List rollsBytesCompact(
+      int fee, int expirePeriod, String senderPubKey, int typeID, int amount) {
+    final encodedFee = Varint.encode(fee);
+    final encodedExpirePeriod = Varint.encode(expirePeriod);
+    final encodedTypeID = Varint.encode(typeID);
+    final encodedAmount = Varint.encode(amount);
+    final senderPubKeyHex = base58CheckDecode(senderPubKey);
+    final data = encodedFee +
+        encodedExpirePeriod +
+        senderPubKeyHex +
+        encodedTypeID +
         encodedAmount;
     return Uint8List.fromList(data);
   }
