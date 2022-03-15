@@ -2,6 +2,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:massaverse/api/api_service.dart';
 import 'package:massaverse/crypto/crypto.dart';
+import 'package:massaverse/crypto/massakey.dart';
 import 'package:massaverse/crypto/util.dart';
 import 'package:massaverse/models/send_transaction.dart';
 
@@ -9,14 +10,22 @@ void main() {
   group('Massa API', () {
     final api = ApiService();
 
-    const privateKey = "26K5LobGsmCeuRm6YMifrsUqutZ8uKs8p34KgbZgC6ECPhMaoM";
-    const publicKey = "6zpnyRf8ZLTeqWL1BVhB5sPByQqDJpJGtERQjF9Hc4yKjQA7ww";
-    const address = "oj8ZWRWodDXm7UeEkm9XgC332kYXcEeFabEaUe7XjWkkjf5zU";
+    const privateKey = "27LUESeV2XNL6aEExPV8u9P9y5pMKkkxwg9LvqAQqmc9q7U3F4";
+    const publicKey = "77qKMXz2vmMPfHx6ioUATs9Ms1WXWbwjZUwmL1L5esqZefsFQJ";
+    const address = "94rmBAS7frtUKvSoKsWg5UGLLFKVS1yqpXAkr1kZg7DxVTdfv";
 
     const privateKey2 = "2QXSCQBGtKrHHBtraNbDhQEzNJ4kTJh5P7b1hfSMT4YPEkmjbH";
     const publicKey2 = "5F9xcai1kRyLvAPYiVYFx9oqrwJkn18G3syznDB75akZTQqTkG";
     const address2 = "kfA75kiE5bTTxmhnghsK1xWeHFzMabcgUY1sf5aGnBgKnypne";
 
+    test("Import wallet", () async {
+      var mk = MassaKey(privateKey);
+      print("private: ${mk.privateKey()}");
+      print("public: ${mk.publicKey()}");
+      print("address: ${mk.address()}");
+      var resp = await api.getStatus();
+      //print("info response: ${resp.encode()}");
+    });
     test("Get info", () async {
       var resp = await api.getStatus();
       //print("info response: ${resp.encode()}");
@@ -71,12 +80,12 @@ void main() {
     });
     test("Send transactions", () async {
       String address = "";
-      var amount = Decimal.parse("10.98764");
-      var fee = Decimal.parse("1.1");
+      var amount = Decimal.parse("15.0");
+      var fee = Decimal.parse("0.1");
 
       //var info = await api.getInfo();
       //if (info == null) return;
-      int expirePeriod = 46005; // info.lastPeriod + 5;
+      int expirePeriod = 61557 + 20; // info.lastPeriod + 5;
 
       var tx = SendTransaction(
           amount: amount.toString(),
@@ -85,12 +94,10 @@ void main() {
           senderPublicKey: publicKey,
           expirePeriod: expirePeriod);
       Crypto.signTransaction(tx, privateKey);
-      //print(
-      //    "reference signature: DuC3rPZPqMvZdh6EvM6Ch6Rc51uGgDZ8zw1biEmZFuwFcoU26sbKMyJTQPSXvtoyvs63jL48CGDBuTCRqVpgRUzVQ6gSj");
       print("tx : ${tx.encode()}");
 
-      //var resp = await api.sendTransaction(tx);
-      //print("send transaction respons: $resp");
+      var resp = await api.sendTransaction(tx);
+      print("send transaction respons: $resp");
     });
   });
 }
