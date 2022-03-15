@@ -24,10 +24,10 @@ and scaled blockchain.
 - [x] get_endorsements
 - [x] get_block
 - [ ] get_graph_interval
-- [ ] get_addresses
+- [x] get_addresses
 - [x] send_transaction
-- [ ] buy_roll
-- [ ] sell_roll
+- [x] buy_roll
+- [x] sell_roll
 - [ ] ExecuteSC (execute smart contract)
 - [ ] get_filtered_sc_output_event
 ### Private API (port:33034)
