@@ -1,54 +1,38 @@
 import 'dart:typed_data';
 
 import 'package:massaverse/crypto/crypto.dart';
-import 'package:massaverse/crypto/secp256k1.dart';
+import 'package:massaverse/crypto/util.dart';
+import 'package:pointycastle/api.dart';
+import 'package:pointycastle/ecc/api.dart';
 
 class MassaKey {
-  late PrivateKey _privateKey;
-  late PublicKey _publicKey;
+  late AsymmetricKeyPair<ECPublicKey, ECPrivateKey> _keyPair;
   late String _address;
   late int _addressThread;
 
   MassaKey(String? privateKeyBase58) {
     //generate a new private key if null is provided
     if (privateKeyBase58 == null) {
-      _privateKey = PrivateKey.generate();
-      _publicKey = _privateKey.publicKey;
-      _address = Crypto.getAddress(_publicKey);
+      _keyPair = Crypto.generateEcKeyPair();
+      _address = Crypto.getAddress(_keyPair.publicKey);
       _addressThread = Crypto.getAddressThread(_address);
     } else {
-      _privateKey = Crypto.getPrivateKeyFromBase58Check(privateKeyBase58);
-      _publicKey = _privateKey.publicKey;
-      _address = Crypto.getAddress(_publicKey);
+      var privKey = Crypto.getPrivateKeyFromBase58(privateKeyBase58);
+      var pubKey = Crypto.getPublicKeyFromPrivate(privKey);
+      _keyPair = AsymmetricKeyPair(pubKey, privKey);
+      _address = Crypto.getAddress(pubKey);
       _addressThread = Crypto.getAddressThread(_address);
     }
   }
 
-  String privateHex() {
-    return _privateKey.toHex();
-  }
-
 // returns private key in base58 format
   String privateKey() {
-    return Crypto.getBase58CheckFromPrivateKey(_privateKey);
-  }
-
-  String privateKeyHex() {
-    return _privateKey.toHex();
-  }
-
-  String publicCompressedHex() {
-    return _publicKey.toCompressedHex();
-  }
-
-  /// returns public key encoded in [hex] format
-  String publicKeyHex() {
-    return _publicKey.toHex();
+    return Crypto.getBase58FromPrivateKey(_keyPair.privateKey);
   }
 
   /// returns public key encoded in [base58Check] format
   String publicKey() {
-    return Crypto.getBase58CheckFromPublicKey(_publicKey);
+    return Crypto.getBase58PublicKey(_keyPair.publicKey);
   }
 
   String address() {
@@ -60,10 +44,10 @@ class MassaKey {
   }
 
   Signature signData(Uint8List data) {
-    return Crypto.signData(data, _privateKey);
+    return Crypto.signData(_keyPair.privateKey, data);
   }
 
-  bool verify(Uint8List data, Signature signature) {
+  /*bool verify(Uint8List data, Signature signature) {
     return Crypto.verify(data, signature, _publicKey);
-  }
+  }*/
 }

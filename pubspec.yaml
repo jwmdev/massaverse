@@ -22,9 +22,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
-  # hash library support md5, sha1, sha224, sha256, sha384, and hmac
-  hash: ^1.0.4 
-
   # base_codecs support base16, base32, base58 and base85
   base_codecs: ^1.0.1
   hex: ^0.2.0
@@ -32,6 +29,8 @@ dependencies:
   http: ^0.13.4 # http for client connect
   decimal: ^2.1.0 #precision calculation
   pointycastle: ^3.5.2
+
+  flutter_js: ^0.5.0+6
 
 dev_dependencies:
   flutter_test:
@@ -56,9 +55,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/massa-icon.svg
+    - assets/massajs/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
