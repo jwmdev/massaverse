@@ -1,5 +1,5 @@
 .dart_tool/
 .packages
 .flutter-plugins-dependencies
+.flutter-plugins
 build
-

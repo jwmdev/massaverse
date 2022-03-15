@@ -60,9 +60,9 @@ void main() {
       const encodedCheck =
           "5Kd3NBUAdUnhyzenEwVLy9pBKxSwXvE9FMPyR4UKZvpe6E3AgLr";
 
-      var dec = Crypto.base58CheckDecode(encodedCheck);
+      var dec = Crypto.base58Decode(encodedCheck);
 
-      expect(encodedCheck, Crypto.base58CheckEncode(dec));
+      expect(encodedCheck, Crypto.base58Encode(dec));
     });
 
     test("signature", () {

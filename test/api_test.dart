@@ -2,8 +2,6 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:massaverse/api/api_service.dart';
 import 'package:massaverse/crypto/crypto.dart';
-import 'package:massaverse/crypto/massakey.dart';
-import 'package:massaverse/crypto/util.dart';
 import 'package:massaverse/models/send_transaction.dart';
 
 void main() {
@@ -18,7 +16,7 @@ void main() {
     const publicKey2 = "5F9xcai1kRyLvAPYiVYFx9oqrwJkn18G3syznDB75akZTQqTkG";
     const address2 = "kfA75kiE5bTTxmhnghsK1xWeHFzMabcgUY1sf5aGnBgKnypne";
 
-    test("Import wallet", () async {
+    /* test("Import wallet", () async {
       var mk = MassaKey(privateKey);
       print("private: ${mk.privateKey()}");
       print("public: ${mk.publicKey()}");
