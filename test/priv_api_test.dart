@@ -19,32 +19,12 @@ void main() {
     const publicKey2 = "5F9xcai1kRyLvAPYiVYFx9oqrwJkn18G3syznDB75akZTQqTkG";
     const address2 = "kfA75kiE5bTTxmhnghsK1xWeHFzMabcgUY1sf5aGnBgKnypne";
 
-// balance before buy roll: 129.23
-// balance after buy roll: 29.23 on March 16, 2022
-
-    /* test("Import wallet", () async {
-      var mk = MassaKey(privateKey);
-      print("private: ${mk.privateKey()}");
-      print("public: ${mk.publicKey()}");
-      print("address: ${mk.address()}");
-      var resp = await api.getStatus();
-      //print("info response: ${resp.encode()}");
-    });
-     test("Get info", () async {
-      var resp = await api.getInfo();
-      try {
-        print("info response: ${resp.encode()}");
-      } catch (e) {
-        throw (e.toString());
-      }
-    });
-    test("Get status", () async {
-      var resp = await api.getStatus();
-      //print("status response: ${resp.connectedNodes}");
-      //print("status response: ${resp.encode()}");
+    test("Get staking addresses", () async {
+      var resp = await api.getStakingAddresses();
+      print("status response: ${resp.connectedNodes}");
     });
 
-    test("Get Cliques", () async {
+    /*test("Get Cliques", () async {
       var resp = await api.getCliques();
       //print("cliques response: ${resp.encode()}");
     });
@@ -156,27 +136,5 @@ void main() {
       var resp = await api.buyRolls(tx);
       print("transaction: $resp");
     });*/
-    test("Sell roll", () async {
-      int amount = 1;
-      var fee = Decimal.parse("0.0");
-      StatusResponse? status = await api.getStatus();
-      if (status == null) {
-        print("error obtaining node status");
-        return;
-      }
-
-      int expirePeriod = status.nextSlot.period + 32; // info.lastPeriod + 5;
-
-      var tx = SellRolls(
-          rolls: amount,
-          fee: fee.toString(),
-          senderPublicKey: publicKey2,
-          expirePeriod: expirePeriod);
-      Crypto.signSellRolls(tx, privateKey2);
-      //print("tx : ${tx.encode()}");
-
-      var resp = await api.sellRolls(tx);
-      print("transaction: $resp");
-    });
   });
 }

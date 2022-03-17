@@ -21,31 +21,23 @@ class ApiService {
   ApiService.internal();
   factory ApiService() => _instance;
 
+//body settings
   final Map<String, dynamic> _body = {
     "jsonrpc": "2.0",
     "id": 123,
     "method": "",
   };
 
+//base urls
+  //final Uri privUri = Uri.http("65.108.223.59:33034", "");
   final Uri privUri = Uri.http("test.massa.net:33034", "");
   final Uri pubUri = Uri.http("test.massa.net:33035", "");
   final Uri massaApi = Uri.https("test.massa.net", "api/v2/info");
 
-  //final Uri proxyUri = Uri.http("proxy.net-main.metahashnetwork.com:9999", "");
-
+//instantiate the client
   final NetworkService _client = NetworkService();
 
-  Future<dynamic> getInfo() async {
-    var response = await _get(massaApi);
-    //print(response);
-    response = response["result"];
-    if (response != null) {
-      var data = Map<String, dynamic>.from(response);
-      return MassaInfo.decode(data);
-    } else {
-      return null;
-    }
-  }
+// ------- PUBLIC API ------ //
 
   Future<StatusResponse?> getStatus() async {
     var method = "get_status";
@@ -164,6 +156,34 @@ class ApiService {
     //response = response["result"];
     return response;
   }
+
+  //---- PRIVATE API -----//
+  // use private base url
+
+  Future<dynamic> getStakingAddresses() async {
+    var method = "get_staking_addresses";
+
+    var response = await _post(privUri, method, null);
+    //print("staking addresses: $response");
+    //response = response["result"];
+    return response;
+  }
+
+  //--- OTHER API ------///
+
+  Future<dynamic> getInfo() async {
+    var response = await _get(massaApi);
+    //print(response);
+    response = response["result"];
+    if (response != null) {
+      var data = Map<String, dynamic>.from(response);
+      return MassaInfo.decode(data);
+    } else {
+      return null;
+    }
+  }
+
+  //---- AUX FUNCTIONS----//
 
   Future<dynamic> _post(Uri url, String method, dynamic params) {
     _body["method"] = method;
