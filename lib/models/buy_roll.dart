@@ -1,7 +1,6 @@
 class BuyRolls {
-  late final String rolls;
+  late final int rolls;
   late final String fee;
-  late final String recipientAddress;
   late final String senderPublicKey;
   late final int expirePeriod;
   late final BuyRollContent content;
@@ -10,7 +9,6 @@ class BuyRolls {
   BuyRolls({
     required this.rolls,
     required this.fee,
-    required this.recipientAddress,
     required this.senderPublicKey,
     required this.expirePeriod,
   }) {
@@ -77,7 +75,7 @@ class RollBuy {
   RollBuy({
     required this.rollCount,
   });
-  late final String rollCount;
+  late final int rollCount;
 
   Map<String, dynamic> encode() {
     final _data = <String, dynamic>{};

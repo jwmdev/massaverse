@@ -16,7 +16,7 @@ and scaled blockchain.
 - [x] generation of keys (private key, public key, address)
 - [x] network service
 - [ ] GUI (Android, iOs, windows, Linux, mac, and web)
-### Public API (port:33034)
+### Public API (node_ip:33035)
 - [x] get_status
 - [x] get_cliques
 - [x] get_stakers
@@ -30,7 +30,7 @@ and scaled blockchain.
 - [x] sell_roll
 - [ ] ExecuteSC (execute smart contract)
 - [ ] get_filtered_sc_output_event
-### Private API (port:33034)
+### Private API (node_ip:33034)
 - [ ] stop_node
 - [ ] node_sign_message
 - [ ] add_staking_private_keys

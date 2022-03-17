@@ -130,22 +130,11 @@ class Crypto {
         int.parse((Decimal.parse(tx.amount) * Decimal.parse("1e9")).toString());
     var encodedData = sendTransactionBytesCompact(feeInt, tx.expirePeriod,
         tx.senderPublicKey, 0, tx.recipientAddress, amountInt);
-    //print("encoded data: $encodedData");
 
     var privKey = Crypto.getPrivateKeyFromBase58(privateKey);
-    var dataHash = sha256Digest(encodedData);
-    //print("hash: $dataHash");
     var signature = signData(privKey, encodedData);
     var r = Util.bigIntToBytes(signature.r);
-    var rb58 = base58Encode(r);
-
     var s = Util.bigIntToBytes(signature.s);
-    var sb58 = base58Encode(s);
-
-    var rHex = Util.byteToHex(r);
-    var sHex = Util.byteToHex(s);
-    print("r = $rHex");
-    print("s = $sHex");
     var sig = r + s;
     tx.signature = base58Encode(Uint8List.fromList(sig));
   }
@@ -153,10 +142,8 @@ class Crypto {
   static signBuyRolls(BuyRolls tx, String privateKey) {
     var feeInt =
         int.parse((Decimal.parse(tx.fee) * Decimal.parse("1e9")).toString());
-    var amountInt =
-        int.parse((Decimal.parse(tx.rolls) * Decimal.parse("1e9")).toString());
     var encodedData = rollsBytesCompact(
-        feeInt, tx.expirePeriod, tx.senderPublicKey, 1, amountInt);
+        feeInt, tx.expirePeriod, tx.senderPublicKey, 1, tx.rolls);
     var privKey = Crypto.getPrivateKeyFromBase58(privateKey);
     var signature = signData(privKey, encodedData);
     var r = Util.bigIntToBytes(signature.r);
@@ -168,10 +155,8 @@ class Crypto {
   static signSellRolls(SellRolls tx, String privateKey) {
     var feeInt =
         int.parse((Decimal.parse(tx.fee) * Decimal.parse("1e9")).toString());
-    var amountInt =
-        int.parse((Decimal.parse(tx.rolls) * Decimal.parse("1e9")).toString());
     var encodedData = rollsBytesCompact(
-        feeInt, tx.expirePeriod, tx.senderPublicKey, 2, amountInt);
+        feeInt, tx.expirePeriod, tx.senderPublicKey, 2, tx.rolls);
     var privKey = Crypto.getPrivateKeyFromBase58(privateKey);
     var signature = signData(privKey, encodedData);
     var r = Util.bigIntToBytes(signature.r);

@@ -47,12 +47,17 @@ class ApiService {
     }
   }
 
-  Future<dynamic> getStatus() async {
+  Future<StatusResponse?> getStatus() async {
     var method = "get_status";
-    var response = await _post(pubUri, method, null);
-    response = response["result"];
-    var data = Map<String, dynamic>.from(response);
-    return StatusResponse.decode(data);
+    try {
+      var response = await _post(pubUri, method, null);
+      //print("status response: $response");
+      response = response["result"];
+      var data = Map<String, dynamic>.from(response);
+      return StatusResponse.decode(data);
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<dynamic> getCliques() async {
@@ -112,8 +117,7 @@ class ApiService {
 
   Future<dynamic> getAddresses(List<String> addresses) async {
     var method = "get_addresses";
-    var params = [addresses];
-    var response = await _post(pubUri, method, params);
+    var response = await _post(pubUri, method, null);
     //print("addresses: $response");
     response = response["result"];
 
@@ -160,30 +164,6 @@ class ApiService {
     //response = response["result"];
     return response;
   }
-/*
-
-//send fund and returns transaction id
-  Future<SendResponse> send(final MetaTxArg tx) async {
-    var method = "mhc_send";
-    var params = {
-      "to": tx.toAddress,
-      "value": tx.value,
-      "fee": tx.fee,
-      "nonce": tx.nonce,
-      "data": tx.data,
-      "pubkey": tx.publicKey,
-      "sign": tx.signature
-    };
-    var response = await _post(proxyUri, method, params);
-    if (response == null) {
-      return SendResponse(status: false, txHash: "");
-    }
-
-    if (response["result"] == "ok") {
-      return SendResponse(status: true, txHash: response["params"]);
-    }
-    return SendResponse(status: false, txHash: response["params"]);
-  }*/
 
   Future<dynamic> _post(Uri url, String method, dynamic params) {
     _body["method"] = method;
